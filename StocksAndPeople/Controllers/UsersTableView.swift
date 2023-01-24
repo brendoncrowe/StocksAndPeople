@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class UsersTableView: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     var searchQuery = "" {
         didSet {
             users = UserResults.fetchUsers().filter {
-                let fullName = "\($0.name.first) \($0.name.last)"
+                let fullName = "\($0.name.first) \($0.name.last)" // searching via a combination of the two strings first and last
                 return fullName.uppercased().contains(searchQuery.uppercased())
             }
         }
@@ -42,9 +42,18 @@ class ViewController: UIViewController {
     func loadData() {
         users = UserResults.fetchUsers()
     }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let userDVC = segue.destination as? UserDetail, let indexPath = tableView.indexPathForSelectedRow else {
+            fatalError("could not load user detail controller")
+        }
+        userDVC.user = users[indexPath.row]
+    }
+    
 }
 
-extension ViewController: UITableViewDataSource, UISearchBarDelegate {
+extension UsersTableView: UITableViewDataSource, UISearchBarDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count

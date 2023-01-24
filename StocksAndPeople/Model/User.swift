@@ -15,6 +15,7 @@ struct User: Decodable {
     let gender: String
     let name: Name
     let location: Location
+    let email: String
 }
 
 struct Name: Decodable {
@@ -31,7 +32,6 @@ struct Location: Decodable {
 }
 
 extension UserResults {
-    
     static func fetchUsers() -> [User] {
         var users = [User]()
         let data = Bundle.readRawJSONData(filename: "userinfo", ext: "json")
